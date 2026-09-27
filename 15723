@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0,
+      maximum-scale=1.0,user-scalable=no">
+
+<title>SRN | IMO KING</title>
+
+<style>
+
+/* =========================================================
+   BASIC
+========================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+    color:#fff;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+body{
+    position:relative;
+}
+
+/* =========================================================
+   MATRIX CANVAS
+========================================================= */
+
+#matrix{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:0;
+    opacity:.55;
+}
+
+/* =========================================================
+   INTRO
+========================================================= */
+
+#intro{
+    position:fixed;
+    inset:0;
+    z-index:100;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+
+    background:#000;
+
+    animation:introFade 1s ease forwards;
+    animation-delay:9s;
+}
+
+@keyframes introFade{
+    to{
+        opacity:0;
+        visibility:hidden;
+    }
+}
+
+.srn{
+    position:relative;
+
+    font-size:
+        clamp(80px,22vw,190px);
+
+    font-weight:1000;
+    letter-spacing:20px;
+
+    color:transparent;
+
+    background:
+        linear-gradient(
+            90deg,
+            #00ffff,
+            #0066ff,
+            #ff00ff,
+            #ff0055,
+            #00ff99,
+            #00ffff
+        );
+
+    background-size:500%;
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    animation:
+        colorMove 1.5s linear infinite,
+        hackerZoom 1.3s ease-in-out infinite alternate;
+
+    filter:
+        drop-shadow(0 0 8px #00ffff)
+        drop-shadow(0 0 25px #ff00ff);
+}
+
+@keyframes colorMove{
+    from{
+        background-position:0%;
+    }
+
+    to{
+        background-position:500%;
+    }
+}
+
+@keyframes hackerZoom{
+    from{
+        transform:
+            scale(.75)
+            skewX(-2deg);
+
+        filter:
+            blur(4px)
+            drop-shadow(0 0 5px #00ffff);
+    }
+
+    to{
+        transform:
+            scale(1.08)
+            skewX(2deg);
+
+        filter:
+            blur(0)
+            drop-shadow(0 0 30px #00ffff)
+            drop-shadow(0 0 60px #ff00ff);
+    }
+}
+
+/* hacker scan */
+
+.scan{
+    position:absolute;
+    width:100%;
+    height:3px;
+
+    background:#00ffff;
+
+    box-shadow:
+        0 0 10px #00ffff,
+        0 0 30px #00ffff;
+
+    animation:scanMove 1.2s linear infinite;
+}
+
+@keyframes scanMove{
+    from{
+        top:0;
+    }
+
+    to{
+        top:100%;
+    }
+}
+
+.introText{
+    margin-top:25px;
+
+    font-size:14px;
+    letter-spacing:6px;
+
+    color:#00ffff;
+
+    animation:blink .4s infinite alternate;
+}
+
+@keyframes blink{
+    from{opacity:.25;}
+    to{opacity:1;}
+}
+
+.timer{
+    margin-top:12px;
+    color:#777;
+    font-size:12px;
+    letter-spacing:3px;
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+#login{
+    position:absolute;
+    z-index:20;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    width:min(90%,420px);
+
+    padding:35px 25px;
+
+    border:
+        1px solid
+        rgba(0,255,255,.8);
+
+    border-radius:25px;
+
+    background:
+        rgba(0,0,0,.82);
+
+    box-shadow:
+        0 0 15px #00ffff,
+        0 0 40px rgba(255,0,255,.25),
+        inset 0 0 30px
+        rgba(0,255,255,.08);
+
+    backdrop-filter:blur(12px);
+
+    display:none;
+}
+
+.loginLogo{
+    text-align:center;
+
+    font-size:70px;
+    font-weight:1000;
+
+    color:transparent;
+
+    background:
+        linear-gradient(
+            90deg,
+            #00ffff,
+            #ff00ff,
+            #ffff00,
+            #00ffff
+        );
+
+    background-size:400%;
+
+    -webkit-background-clip:text;
+
+    animation:colorMove 2s linear infinite;
+}
+
+.loginTitle{
+    text-align:center;
+
+    margin-top:5px;
+    margin-bottom:28px;
+
+    color:#888;
+
+    letter-spacing:5px;
+}
+
+#pin{
+    width:100%;
+
+    padding:16px;
+
+    border:
+        1px solid
+        #00ffff;
+
+    border-radius:12px;
+
+    background:#030303;
+
+    color:#00ffff;
+
+    outline:none;
+
+    text-align:center;
+
+    font-size:21px;
+
+    letter-spacing:8px;
+
+    box-shadow:
+        0 0 15px
+        rgba(0,255,255,.2);
+}
+
+#pin:focus{
+    box-shadow:
+        0 0 10px #00ffff,
+        0 0 30px #00ffff;
+}
+
+.loginButton{
+    width:100%;
+
+    margin-top:18px;
+
+    padding:15px;
+
+    border:0;
+    border-radius:12px;
+
+    cursor:pointer;
+
+    color:#fff;
+
+    font-size:17px;
+    font-weight:bold;
+
+    background:
+        linear-gradient(
+            90deg,
+            #00ffff,
+            #0066ff,
+            #ff00ff,
+            #00ffff
+        );
+
+    background-size:400%;
+
+    animation:colorMove 3s linear infinite;
+
+    box-shadow:
+        0 0 15px #00ffff,
+        0 0 30px #ff00ff;
+}
+
+.loginButton:active{
+    transform:scale(.95);
+}
+
+#error{
+    height:25px;
+
+    margin-top:14px;
+
+    text-align:center;
+
+    font-size:14px;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+#main{
+    position:absolute;
+    inset:0;
+
+    z-index:10;
+
+    display:none;
+
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+}
+
+/* =========================================================
+   NAME AREA
+========================================================= */
+
+.names{
+    width:95%;
+    max-width:900px;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:18px;
+}
+
+/* =========================================================
+   NAME LOGO
+========================================================= */
+
+.name{
+    position:relative;
+
+    min-width:145px;
+
+    padding:
+        20px 24px;
+
+    border-radius:24px;
+
+    cursor:pointer;
+
+    user-select:none;
+
+    font-size:
+        clamp(24px,6vw,50px);
+
+    font-weight:1000;
+
+    color:#fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,255,255,.13),
+            rgba(255,0,255,.12),
+            rgba(255,255,0,.08)
+        );
+
+    border:
+        2px solid
+        rgba(0,255,255,.65);
+
+    box-shadow:
+        0 0 10px #00ffff,
+        0 0 25px rgba(255,0,255,.5),
+        inset 0 0 20px
+        rgba(255,255,255,.06);
+
+    text-shadow:
+        0 0 8px #00ffff,
+        0 0 18px #ff00ff;
+
+    animation:
+        floating 2s ease-in-out infinite,
+        rainbowGlow 1.5s infinite alternate;
+}
+
+.name:nth-child(1){
+    animation-delay:0s;
+}
+
+.name:nth-child(2){
+    animation-delay:.2s;
+}
+
+.name:nth-child(3){
+    animation-delay:.4s;
+}
+
+.name:nth-child(4){
+    animation-delay:.6s;
+}
+
+@keyframes floating{
+
+    0%,100%{
+        transform:
+            translateY(0)
+            rotateX(0)
+            rotateY(0);
+    }
+
+    50%{
+        transform:
+            translateY(-16px)
+            rotateX(8deg)
+            rotateY(-5deg);
+    }
+}
+
+@keyframes rainbowGlow{
+
+    from{
+        filter:brightness(.8);
+    }
+
+    to{
+        filter:brightness(1.5);
+    }
+}
+
+/* =========================================================
+   SHINE
+========================================================= */
+
+.name::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-120%;
+
+    width:50%;
+    height:100%;
+
+    transform:
+        skewX(-25deg);
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.8),
+            transparent
+        );
+
+    animation:shine 2.5s infinite;
+}
+
+@keyframes shine{
+
+    0%{
+        left:-120%;
+    }
+
+    55%,100%{
+        left:150%;
+    }
+}
+
+/* =========================================================
+   KING
+========================================================= */
+
+#king{
+    display:none;
+
+    margin-top:45px;
+
+    padding:10px 20px;
+
+    font-size:
+        clamp(30px,8vw,75px);
+
+    font-weight:1000;
+
+    color:transparent;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff0055,
+            #ffff00,
+            #00ffff,
+            #00ff66,
+            #ff00ff,
+            #ff0055
+        );
+
+    background-size:600%;
+
+    -webkit-background-clip:text;
+
+    animation:
+        colorMove 2s linear infinite,
+        kingPulse .8s infinite alternate;
+
+    filter:
+        drop-shadow(0 0 15px #00ffff);
+}
+
+@keyframes kingPulse{
+
+    from{
+        transform:scale(.95);
+    }
+
+    to{
+        transform:scale(1.08);
+    }
+}
+
+/* =========================================================
+   POWERED
+========================================================= */
+
+#powered{
+
+    display:none;
+
+    margin-top:25px;
+
+    font-size:
+        clamp(15px,4vw,28px);
+
+    letter-spacing:4px;
+
+    color:#fff;
+
+    text-shadow:
+        0 0 10px #00ffff,
+        0 0 20px #ff00ff;
+
+    animation:
+        poweredIn 2s ease forwards;
+}
+
+@keyframes poweredIn{
+
+    from{
+        opacity:0;
+        transform:translateY(40px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* =========================================================
+   CRACK OVERLAY
+========================================================= */
+
+#damage{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:200;
+
+    pointer-events:none;
+
+    display:none;
+
+    overflow:hidden;
+}
+
+/* =========================================================
+   CRACK LINES
+========================================================= */
+
+.crack{
+
+    position:absolute;
+
+    width:4px;
+
+    height:130%;
+
+    top:-15%;
+
+    background:
+        linear-gradient(
+            transparent,
+            rgba(255,255,255,.9),
+            rgba(0,255,255,.9),
+            transparent
+        );
+
+    box-shadow:
+        0 0 5px #fff,
+        0 0 12px #00ffff;
+
+    transform-origin:center;
+
+    opacity:.9;
+
+    animation:
+        crackAppear .25s ease forwards;
+}
+
+@keyframes crackAppear{
+
+    from{
+        opacity:0;
+        transform:
+            scaleY(0)
+            rotate(0deg);
+    }
+
+    to{
+        opacity:1;
+        transform:
+            scaleY(1)
+            rotate(var(--r));
+    }
+}
+
+/* small crack */
+
+.crackSmall{
+
+    position:absolute;
+
+    height:3px;
+
+    background:#fff;
+
+    box-shadow:
+        0 0 6px #00ffff;
+
+    transform-origin:left center;
+
+    animation:
+        crackSmall .3s ease forwards;
+}
+
+@keyframes crackSmall{
+
+    from{
+        width:0;
+    }
+
+    to{
+        width:var(--w);
+    }
+}
+
+/* =========================================================
+   GLITCH LINES
+========================================================= */
+
+.glitchLine{
+
+    position:absolute;
+
+    left:0;
+
+    width:100%;
+
+    height:
+        var(--h);
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #00ffff,
+            #ff00ff,
+            transparent
+        );
+
+    opacity:.9;
+
+    animation:
+        glitchMove .4s linear infinite;
+}
+
+@keyframes glitchMove{
+
+    0%{
+        transform:
+            translateX(-20%)
+            scaleX(.5);
+    }
+
+    50%{
+        transform:
+            translateX(20%)
+            scaleX(1.2);
+    }
+
+    100%{
+        transform:
+            translateX(-10%)
+            scaleX(.7);
+    }
+}
+
+/* =========================================================
+   SCREEN FLASH
+========================================================= */
+
+#flash{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:190;
+
+    background:#fff;
+
+    opacity:0;
+
+    pointer-events:none;
+}
+
+/* =========================================================
+   SCREEN SHAKE
+========================================================= */
+
+.shake{
+    animation:
+        screenShake .45s linear;
+}
+
+@keyframes screenShake{
+
+    0%{
+        transform:translate(0,0);
+    }
+
+    20%{
+        transform:translate(-8px,5px);
+    }
+
+    40%{
+        transform:translate(8px,-5px);
+    }
+
+    60%{
+        transform:translate(-6px,-4px);
+    }
+
+    80%{
+        transform:translate(5px,4px);
+    }
+
+    100%{
+        transform:translate(0,0);
+    }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:600px){
+
+    .srn{
+        letter-spacing:8px;
+    }
+
+    .names{
+        gap:12px;
+    }
+
+    .name{
+        min-width:135px;
+        padding:17px 14px;
+        font-size:25px;
+    }
+
+    #king{
+        margin-top:30px;
+    }
+
+    .loginLogo{
+        font-size:60px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<!-- =======================================================
+     MATRIX
+======================================================= -->
+
+<canvas id="matrix"></canvas>
+
+
+<!-- =======================================================
+     INTRO
+======================================================= -->
+
+<div id="intro">
+
+    <div class="scan"></div>
+
+    <div class="srn">
+        SRN
+    </div>
+
+    <div class="introText">
+        SYSTEM INITIALIZING...
+    </div>
+
+    <div class="timer">
+        ACCESS PROTOCOL
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     LOGIN
+======================================================= -->
+
+<div id="login">
+
+    <div class="loginLogo">
+        SRN
+    </div>
+
+    <div class="loginTitle">
+        SECURE ACCESS
+    </div>
+
+    <input
+        id="pin"
+        type="password"
+        maxlength="6"
+        placeholder="ENTER PIN"
+        autocomplete="off"
+    >
+
+    <button
+        class="loginButton"
+        onclick="login()">
+
+        LOGIN
+
+    </button>
+
+    <div id="error"></div>
+
+</div>
+
+
+<!-- =======================================================
+     MAIN PAGE
+======================================================= -->
+
+<div id="main">
+
+    <div class="names">
+
+        <div
+            class="name"
+            onclick="damageScreen(this)">
+            Sulthan
+        </div>
+
+        <div
+            class="name"
+            onclick="damageScreen(this)">
+            Rinu
+        </div>
+
+        <div
+            class="name"
+            onclick="damageScreen(this)">
+            Nukki
+        </div>
+
+        <div
+            class="name"
+            onclick="damageScreen(this)">
+            Raisul
+        </div>
+
+    </div>
+
+
+    <div id="king">
+        நாங்கள் தான் imo king
+    </div>
+
+
+    <div id="powered">
+        Powered by:- Sulthan 2026
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     DAMAGE EFFECT
+======================================================= -->
+
+<div id="damage"></div>
+
+<div id="flash"></div>
+
+
+<script>
+
+/* =========================================================
+   MATRIX EFFECT
+========================================================= */
+
+const canvas =
+    document.getElementById("matrix");
+
+const ctx =
+    canvas.getContext("2d");
+
+let W;
+let H;
+let drops=[];
+
+const chars =
+"01ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&@<>[]{}";
+
+function resize(){
+
+    W =
+        canvas.width =
+        window.innerWidth;
+
+    H =
+        canvas.height =
+        window.innerHeight;
+
+    let columns =
+        Math.floor(W/15);
+
+    drops=[];
+
+    for(let i=0;i<columns;i++){
+
+        drops[i]=
+            Math.random()*-100;
+    }
+}
+
+resize();
+
+window.addEventListener(
+    "resize",
+    resize
+);
+
+function matrix(){
+
+    ctx.fillStyle=
+        "rgba(0,0,0,.09)";
+
+    ctx.fillRect(
+        0,
+        0,
+        W,
+        H
+    );
+
+    ctx.font=
+        "14px monospace";
+
+    for(
+        let i=0;
+        i<drops.length;
+        i++
+    ){
+
+        const letter =
+            chars[
+                Math.floor(
+                    Math.random()*
+                    chars.length
+                )
+            ];
+
+        const x =
+            i*15;
+
+        const y =
+            drops[i]*15;
+
+        ctx.fillStyle =
+            Math.random()>.82
+            ? "#ff00ff"
+            : "#00ffff";
+
+        ctx.fillText(
+            letter,
+            x,
+            y
+        );
+
+        if(
+            y>H &&
+            Math.random()>.975
+        ){
+            drops[i]=0;
+        }
+
+        drops[i]++;
+    }
+}
+
+setInterval(
+    matrix,
+    45
+);
+
+
+/* =========================================================
+   INTRO → LOGIN
+   10 SECONDS
+========================================================= */
+
+setTimeout(function(){
+
+    document.getElementById(
+        "intro"
+    ).style.display="none";
+
+    document.getElementById(
+        "login"
+    ).style.display="block";
+
+},10000);
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+function login(){
+
+    const pin =
+        document.getElementById(
+            "pin"
+        ).value;
+
+    const error =
+        document.getElementById(
+            "error"
+        );
+
+    /* REQUIRED PIN */
+
+    if(pin==="SRN123"){
+
+        error.innerHTML=
+            "ACCESS GRANTED ✓";
+
+        error.style.color=
+            "#00ff99";
+
+        setTimeout(function(){
+
+            document.getElementById(
+                "login"
+            ).style.display="none";
+
+            document.getElementById(
+                "main"
+            ).style.display="flex";
+
+            startNames();
+
+        },700);
+
+    }else{
+
+        error.innerHTML=
+            "ACCESS DENIED ✕";
+
+        error.style.color=
+            "#ff0055";
+
+        document.getElementById(
+            "pin"
+        ).value="";
+
+    }
+
+}
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
+
+document.getElementById(
+    "pin"
+).addEventListener(
+    "keydown",
+    function(e){
+
+        if(e.key==="Enter"){
+            login();
+        }
+
+    }
+);
+
+
+/* =========================================================
+   NAME ANIMATION
+   10 SECOND TIMER
+========================================================= */
+
+function startNames(){
+
+    setTimeout(function(){
+
+        document.getElementById(
+            "king"
+        ).style.display="block";
+
+    },10000);
+
+
+    setTimeout(function(){
+
+        document.getElementById(
+            "powered"
+        ).style.display="block";
+
+    },12500);
+
+}
+
+
+/* =========================================================
+   PHONE SCREEN DAMAGE EFFECT
+========================================================= */
+
+function damageScreen(element){
+
+    const damage =
+        document.getElementById(
+            "damage"
+        );
+
+    const flash =
+        document.getElementById(
+            "flash"
+        );
+
+    /* Clear previous */
+
+    damage.innerHTML="";
+
+    damage.style.display="block";
+
+    /* Screen flash */
+
+    flash.style.opacity=".65";
+
+    setTimeout(function(){
+
+        flash.style.opacity="0";
+
+    },80);
+
+
+    /* =====================================================
+       BIG CRACKS
+    ===================================================== */
+
+    for(
+        let i=0;
+        i<9;
+        i++
+    ){
+
+        const crack =
+            document.createElement(
+                "div"
+            );
+
+        crack.className="crack";
+
+        crack.style.left =
+            Math.random()*100+"%";
+
+        crack.style.setProperty(
+            "--r",
+            (Math.random()*35-17)+"deg"
+        );
+
+        crack.style.animationDelay =
+            (Math.random()*.2)+"s";
+
+        damage.appendChild(
+            crack
+        );
+    }
+
+
+    /* =====================================================
+       SMALL CRACK BRANCHES
+    ===================================================== */
+
+    for(
+        let i=0;
+        i<28;
+        i++
+    ){
+
+        const branch =
+            document.createElement(
+                "div"
+            );
+
+        branch.className=
+            "crackSmall";
+
+        branch.style.left =
+            Math.random()*100+"%";
+
+        branch.style.top =
+            Math.random()*100+"%";
+
+        branch.style.setProperty(
+            "--w",
+            (30+
+             Math.random()*160)+"px"
+        );
+
+        branch.style.transform =
+            "rotate("+
+            (Math.random()*360)+
+            "deg)";
+
+        damage.appendChild(
+            branch
+        );
+    }
+
+
+    /* =====================================================
+       GLITCH LINES
+    ===================================================== */
+
+    for(
+        let i=0;
+        i<18;
+        i++
+    ){
+
+        const line =
+            document.createElement(
+                "div"
+            );
+
+        line.className=
+            "glitchLine";
+
+        line.style.top =
+            Math.random()*100+"%";
+
+        line.style.setProperty(
+            "--h",
+            (1+
+             Math.random()*5)+"px"
+        );
+
+        line.style.animationDelay =
+            Math.random()+
+            "s";
+
+        damage.appendChild(
+            line
+        );
+    }
+
+
+    /* =====================================================
+       SCREEN SHAKE
+    ===================================================== */
+
+    document.body.classList.add(
+        "shake"
+    );
+
+    setTimeout(function(){
+
+        document.body.classList.remove(
+            "shake"
+        );
+
+    },450);
+
+
+    /* =====================================================
+       SOUND-LIKE VISUAL PULSE
+    ===================================================== */
+
+    element.style.transform=
+        "scale(.92)";
+
+    setTimeout(function(){
+
+        element.style.transform="";
+
+    },180);
+
+
+    /* =====================================================
+       REMOVE CRACK AFTER 2.5 SEC
+    ===================================================== */
+
+    setTimeout(function(){
+
+        damage.style.opacity="0";
+
+        damage.style.transition=
+            "opacity .6s ease";
+
+        setTimeout(function(){
+
+            damage.style.display="none";
+            damage.style.opacity="1";
+            damage.style.transition="";
+            damage.innerHTML="";
+
+        },600);
+
+    },2500);
+
+}
+
+
+/* =========================================================
+   PREVENT DOUBLE TAP ZOOM
+========================================================= */
+
+let lastTouch=0;
+
+document.addEventListener(
+    "touchend",
+    function(event){
+
+        const now=
+            Date.now();
+
+        if(
+            now-lastTouch<=300
+        ){
+            event.preventDefault();
+        }
+
+        lastTouch=now;
+
+    },
+    {passive:false}
+);
+
+</script>
+
+</body>
+</html>
